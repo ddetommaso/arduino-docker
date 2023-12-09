@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  arduino-ide:
+    image: arduino-ide:2.2.1
+
+    container_name: arduino-ide-container
+
+    network_mode: host
+
+    privileged: true
+
+    environment:
+      - DISPLAY=${DISPLAY}
+      - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
+
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${PWD}/workspace/99-arduino.rules:/etc/udev/rules.d/99-arduino.rules
+      - ${PWD}/workspace:/workspace
+      - ${PWD}/workspace/arduino-cli.yaml:/home/docky/.arduinoIDE/arduino-cli.yaml
+      - arduino15:/home/docky/.arduino15
+      - arduinoIDE:/home/docky/.arduinoIDE
+    
+    command: arduino-ide
+
+volumes:
+  arduino15:
+  arduinoIDE:

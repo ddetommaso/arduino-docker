@@ -1,0 +1,29 @@
+board_manager:
+  additional_urls: []
+build_cache:
+  compilations_before_purge: 10
+  ttl: 720h0m0s
+daemon:
+  port: "50051"
+directories:
+  builtin:
+    libraries: /home/docky/.arduino15/libraries
+  data: /home/docky/.arduino15
+  downloads: /home/docky/.arduino15/staging
+  user: /workspace
+library:
+  enable_unsafe_install: false
+locale: en
+logging:
+  file: ""
+  format: text
+  level: info
+metrics:
+  addr: :9090
+  enabled: true
+output:
+  no_color: false
+sketch:
+  always_export_binaries: false
+updater:
+  enable_notification: true
