@@ -59,6 +59,11 @@ RUN apt-get install -y \
     gnupg \
     lsb-release;
 
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt install -y ./google-chrome-stable_current_amd64.deb
+
+RUN pip install pyserial
+
 ARG ARDUINO_IDE_VERSION=2.2.1
 ARG ARDUINO_CLI_VERSION=0.34.2
 

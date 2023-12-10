@@ -28,12 +28,16 @@ services:
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev:/dev
-      - ${PWD}/workspace:/workspace
+      - ${PWD}/arduino-cli.yaml:/home/docky/.arduinoIDE/arduino-cli.yaml
+      - ${PWD}/CLI-init.sh:/workspace/CLI-init.sh
+      - ${PWD}/project:/workspace/project
       - arduino15:/home/docky/.arduino15
       - arduinoIDE:/home/docky/.arduinoIDE
+      - workspace:/workspace
     
-    command: sh -c "arduino-cli core update-index --config-file=/home/docky/.arduino15/arduino-cli.yaml && xargs -n 2 arduino-cli core install --config-file=/home/docky/.arduino15/arduino-cli.yaml < /workspace/arduino-packages.txt && arduino-cli core list && arduino-ide"
+    command: sh -c "bash /workspace/CLI-init.sh && arduino-ide /workspace/project"
 
 volumes:
   arduino15:
   arduinoIDE:
+  workspace:

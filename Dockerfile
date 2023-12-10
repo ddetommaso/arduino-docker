@@ -16,13 +16,14 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
+WORKDIR /workspace
+
 RUN chown $USER_UID:$USER_GID /usr/local/share/arduino-ide;
 RUN chown $USER_UID:$USER_GID /usr/local/share/arduino-cli;
+RUN chown $USER_UID:$USER_GID /workspace;
 
 RUN groupmod -g ${PLUGDEV_GROUP_ID} plugdev && usermod -a -G plugdev ${USERNAME}
 RUN groupmod -g ${DIALOUT_GROUP_ID} dialout && usermod -a -G dialout ${USERNAME}
-
-WORKDIR /workspace
 
 USER $USERNAME
 
