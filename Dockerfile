@@ -17,8 +17,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 RUN chown $USER_UID:$USER_GID /usr/local/share/arduino-ide;
-
-ENV PATH=${PATH}:/usr/local/share/arduino-ide
+RUN chown $USER_UID:$USER_GID /usr/local/share/arduino-cli;
 
 RUN groupmod -g ${PLUGDEV_GROUP_ID} plugdev && usermod -a -G plugdev ${USERNAME}
 RUN groupmod -g ${DIALOUT_GROUP_ID} dialout && usermod -a -G dialout ${USERNAME}

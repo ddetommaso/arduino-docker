@@ -12,10 +12,13 @@ RUN apt-get update && \
 
 # Build arguments for Arduino IDE
 ARG ARDUINO_IDE_VERSION=2.2.1
+ARG ARDUINO_CLI_VERSION=0.34.2
 
 # Download Arduino IDE
 WORKDIR /
+
 RUN wget https://github.com/arduino/arduino-ide/releases/download/${ARDUINO_IDE_VERSION}/arduino-ide_${ARDUINO_IDE_VERSION}_Linux_64bit.zip
+RUN wget https://github.com/arduino/arduino-cli/releases/download/${ARDUINO_CLI_VERSION}/arduino-cli_${ARDUINO_CLI_VERSION}_Linux_64bit.tar.gz
 
 FROM ubuntu:20.04
 
@@ -57,6 +60,7 @@ RUN apt-get install -y \
     lsb-release;
 
 ARG ARDUINO_IDE_VERSION=2.2.1
+ARG ARDUINO_CLI_VERSION=0.34.2
 
 COPY --from=builder /arduino-ide_${ARDUINO_IDE_VERSION}_Linux_64bit.zip /tmp/arduino-ide.zip
 
@@ -64,4 +68,9 @@ RUN unzip /tmp/arduino-ide.zip -d /usr/local/share/ && \
     mv /usr/local/share/arduino-ide_* /usr/local/share/arduino-ide && \
     rm /tmp/arduino-ide.zip;
 
-ENV PATH=${PATH}:/usr/local/share/arduino-ide
+COPY --from=builder /arduino-cli_${ARDUINO_CLI_VERSION}_Linux_64bit.tar.gz /usr/local/share/arduino-cli.tar.gz
+
+RUN mkdir /usr/local/share/arduino-cli && \
+    tar xzvf /usr/local/share/arduino-cli.tar.gz -C /usr/local/share/arduino-cli
+
+ENV PATH=${PATH}:/usr/local/share/arduino-ide:/usr/local/share/arduino-cli

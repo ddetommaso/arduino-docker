@@ -3,7 +3,8 @@ version: '3'
 services:
 
   arduino-ide:
-    image: arduino-project
+    image: arduino-ide.local
+
     build:
       context: .
       dockerfile: Dockerfile
@@ -28,11 +29,10 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev:/dev
       - ${PWD}/workspace:/workspace
-      - ${PWD}/workspace/arduino-cli.yaml:/home/docky/.arduinoIDE/arduino-cli.yaml
       - arduino15:/home/docky/.arduino15
       - arduinoIDE:/home/docky/.arduinoIDE
     
-    command: arduino-ide
+    command: sh -c "arduino-cli core update-index --config-file=/home/docky/.arduino15/arduino-cli.yaml && xargs -n 2 arduino-cli core install --config-file=/home/docky/.arduino15/arduino-cli.yaml < /workspace/arduino-packages.txt && arduino-cli core list && arduino-ide"
 
 volumes:
   arduino15:

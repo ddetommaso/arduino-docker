@@ -34,6 +34,7 @@ This repository provides a Dockerized version of the Arduino IDE 2.x, allowing y
 ### Customization
 
 - **Arduino IDE Version**: Update the `ARDUINO_IDE_VERSION` variable in the `docker/.env` file to choose the Arduino IDE version.
+- **Arduino packages**: Add packages in `workspace/arduino-packages.txt` with relative version to have them automatically installed in the container.
 
 ### Start with your project
 
