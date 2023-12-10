@@ -10,10 +10,10 @@ RUN apt-get update && \
     software-properties-common \
     wget
 
-# Build arguments for Arduino IDE and CLI versions
+# Build arguments for Arduino IDE
 ARG ARDUINO_IDE_VERSION=2.2.1
 
-# Download Arduino IDE and CLI
+# Download Arduino IDE
 WORKDIR /
 RUN wget https://github.com/arduino/arduino-ide/releases/download/${ARDUINO_IDE_VERSION}/arduino-ide_${ARDUINO_IDE_VERSION}_Linux_64bit.zip
 
@@ -58,34 +58,10 @@ RUN apt-get install -y \
 
 ARG ARDUINO_IDE_VERSION=2.2.1
 
-ARG USERNAME=docky
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-ARG PLUGDEV_GROUP_ID
-ARG DIALOUT_GROUP_ID
-
-# Create the user
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && apt-get update \
-    && apt-get install -y sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME
-
 COPY --from=builder /arduino-ide_${ARDUINO_IDE_VERSION}_Linux_64bit.zip /tmp/arduino-ide.zip
 
 RUN unzip /tmp/arduino-ide.zip -d /usr/local/share/ && \
     mv /usr/local/share/arduino-ide_* /usr/local/share/arduino-ide && \
-    rm /tmp/arduino-ide.zip && \
-    chown $USER_UID:$USER_GID /usr/local/share/arduino-ide;
+    rm /tmp/arduino-ide.zip;
 
 ENV PATH=${PATH}:/usr/local/share/arduino-ide
-
-RUN groupmod -g ${PLUGDEV_GROUP_ID} plugdev && usermod -a -G plugdev ${USERNAME}
-RUN groupmod -g ${DIALOUT_GROUP_ID} dialout && usermod -a -G dialout ${USERNAME}
-
-WORKDIR /workspace
-
-USER $USERNAME
-
-RUN mkdir /home/${USERNAME}/.arduinoIDE && mkdir /home/${USERNAME}/.arduino15
